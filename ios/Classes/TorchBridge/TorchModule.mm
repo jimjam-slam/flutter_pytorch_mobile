@@ -26,7 +26,7 @@
     try {
         at::Tensor tensor = torch::from_blob(imageBuffer, {1, 3, height, width}, at::kFloat);
         torch::autograd::AutoGradMode guard(false);
-        at::AutoNonVariableTypeMode non_var_type_mode(true);
+        at::AutoDispatchBelowADInplaceOrView non_var_type_mode(true);
         
         at::Tensor outputTensor = _module.forward({tensor}).toTensor();
         
@@ -61,7 +61,7 @@
     
     at::Tensor tensor = torch::from_blob(data, shapeVec, type);
     torch::autograd::AutoGradMode guard(false);
-	at::AutoNonVariableTypeMode non_var_type_mode(true);    
+	at::AutoDispatchBelowADInplaceOrView non_var_type_mode(true);    
 	
     at::Tensor outputTensor =  _module.forward({tensor}).toTensor();
     

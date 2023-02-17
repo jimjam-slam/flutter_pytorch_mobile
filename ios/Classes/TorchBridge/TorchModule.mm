@@ -25,7 +25,7 @@
 - (NSArray<NSNumber*>*)predictImage:(void*)imageBuffer withWidth:(int)width andHeight:(int)height {
     try {
         at::Tensor tensor = torch::from_blob(imageBuffer, {1, 3, height, width}, at::kFloat);
-        torch::autograd::AutoGradMode guard(false);
+        c10::InferenceMode guard;
         at::AutoNonVariableTypeMode non_var_type_mode(true);
         
         at::Tensor outputTensor = _module.forward({tensor}).toTensor();
@@ -60,7 +60,7 @@
     at::ScalarType type = [self _convert: dtype];
     
     at::Tensor tensor = torch::from_blob(data, shapeVec, type);
-    torch::autograd::AutoGradMode guard(false);
+    c10::InferenceMode guard;
 	at::AutoNonVariableTypeMode non_var_type_mode(true);    
 	
     at::Tensor outputTensor =  _module.forward({tensor}).toTensor();
